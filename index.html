@@ -24,7 +24,6 @@
             overflow: hidden;
             cursor: default;
             transition: background-color 0.5s;
-            -webkit-tap-highlight-color: transparent;
             position: relative;
         }
         
@@ -35,10 +34,15 @@
             max-width: 90%;
             width: 100%;
             position: relative;
+            height: 100vh;
+            overflow: hidden;
         }
         
         .screen.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .title {
@@ -59,6 +63,7 @@
             animation: fadeIn 2s ease-out 0.5s forwards;
             cursor: pointer;
             position: relative;
+            padding: 10px;
         }
         
         .glitched-text {
@@ -77,7 +82,7 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            font-size: 16px; /* 防止iOS缩放 */
+            font-size: 16px;
             background: transparent;
             border: none;
             color: transparent;
@@ -180,15 +185,6 @@
             animation: fadeIn 2s ease-out forwards;
         }
         
-        .password-hint {
-            font-size: 1.3rem;
-            color: #aaa;
-            margin-top: 20px;
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 1.5s forwards;
-        }
-        
         .click-to-open {
             font-size: 1.2rem;
             color: #aaa;
@@ -212,30 +208,32 @@
         
         /* 隐藏结局样式 */
         .secret-btn {
-            background-color: #333;
+            background-color: #222;
             color: #ff5555;
-            border: 1px solid #ff5555;
+            border: 2px solid #ff5555;
             animation: secretPulse 2s infinite;
             z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 85, 85, 0.5);
         }
         
         .watch-out {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #ff5555;
-            margin: 20px 0;
+            margin: 30px 0;
             animation: warningBlink 1s infinite;
             opacity: 0;
-            animation: fadeIn 1s forwards;
+            animation: fadeIn 1s forwards, warningBlink 1s infinite 1s;
         }
         
         .ok-btn {
             background-color: #ff5555;
             color: #000;
             font-weight: bold;
-            margin: 20px auto;
+            margin: 30px auto;
             display: block;
             opacity: 0;
             animation: fadeIn 1s 0.5s forwards;
+            border: none;
         }
         
         .countdown-container {
@@ -251,45 +249,46 @@
             z-index: 100;
             background-color: #fff;
             color: #000;
+            transition: all 2s ease;
         }
         
         .countdown-title {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: #000;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
             opacity: 0;
             animation: fadeIn 2s forwards;
         }
         
         .countdown {
             font-size: 3.5rem;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             color: #000;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             font-weight: bold;
             opacity: 0;
             animation: fadeIn 2s 0.5s forwards;
+            letter-spacing: 2px;
         }
         
         .countdown-message {
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: #000;
-            margin-top: 40px;
+            margin-top: 30px;
             text-align: center;
             line-height: 1.4;
             opacity: 0;
             animation: fadeIn 2s 1s forwards;
+            padding: 0 20px;
         }
         
         .draggable-container {
             position: fixed;
             bottom: 50px;
             width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 100px;
-            z-index: 200;
+            height: 150px;
             display: none;
+            z-index: 200;
         }
         
         .draggable {
@@ -299,56 +298,80 @@
             cursor: grab;
             position: absolute;
             user-select: none;
-            transition: transform 0.2s;
+            transition: transform 0.3s;
             font-weight: bold;
             touch-action: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
         .draggable:active {
             cursor: grabbing;
             z-index: 1000;
+            transform: scale(1.05);
         }
         
         .draggable.happy {
             background-color: #ffcc00;
             color: #000;
-            left: 20%;
+            left: 50px;
             top: 50%;
+            transform: translateY(-50%);
         }
         
         .draggable.sad {
             background-color: #0066cc;
             color: #fff;
-            right: 20%;
+            right: 50px;
             top: 50%;
+            transform: translateY(-50%);
         }
         
         .merge-zone {
-            position: fixed;
+            position: absolute;
             bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
-            width: 200px;
-            height: 80px;
+            width: 250px;
+            height: 100px;
             border: 3px dashed #000;
-            border-radius: 10px;
-            display: flex;
+            border-radius: 15px;
+            display: none;
             align-items: center;
             justify-content: center;
-            display: none;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: bold;
         }
         
         .merge-message {
             font-size: 4rem;
             color: #000;
-            position: fixed;
-            bottom: 150px;
+            position: absolute;
+            bottom: 200px;
             left: 50%;
             transform: translateX(-50%);
             display: none;
             font-weight: bold;
             animation: finalPulse 2s infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* 点击反馈点 */
+        .click-feedback {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(0, 255, 0, 0.7);
+            pointer-events: none;
+            z-index: 10000;
+            animation: clickPulse 0.8s forwards;
+        }
+        
+        @keyframes clickPulse {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
         }
         
         @keyframes fadeIn {
@@ -362,13 +385,19 @@
         }
         
         @keyframes secretPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 5px #ff5555; }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px #ff5555; }
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 10px rgba(255, 85, 85, 0.5);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 25px rgba(255, 85, 85, 0.8);
+            }
         }
         
         @keyframes warningBlink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.3; }
         }
         
         @keyframes finalPulse {
@@ -415,12 +444,22 @@
             }
             
             .countdown-message {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
             .draggable {
                 font-size: 1.8rem;
                 padding: 15px 30px;
+            }
+            
+            .merge-zone {
+                width: 200px;
+                height: 80px;
+            }
+            
+            .merge-message {
+                font-size: 3rem;
+                bottom: 150px;
             }
         }
         
@@ -435,33 +474,43 @@
             40%, 80% { transform: translateX(10px); }
         }
         
-        /* 修复按钮点击响应 */
-        .btn, .click-to-open {
-            -webkit-user-select: none;
-            user-select: none;
+        /* 角标区域提示 */
+        .corner-hint {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            opacity: 0.1;
+            transition: opacity 0.3s;
         }
         
-        /* 防止iOS缩放 */
-        input {
-            font-size: 16px !important;
-            transform: scale(1);
+        .corner-hint:hover {
+            opacity: 0.3;
         }
         
-        /* 隐藏输入框的光标和文本 */
-        input[type="text"], input[type="number"] {
-            caret-color: transparent;
+        .top-left {
+            top: 0;
+            left: 0;
+            background-color: #00ff00;
+        }
+        
+        .bottom-left {
+            bottom: 0;
+            left: 0;
+            background-color: #00ff00;
         }
     </style>
 </head>
 <body>
     <!-- Screen 1: MY BIRTHDAY -->
     <div id="screen1" class="screen active">
+        <div class="corner-hint top-left"></div>
         <h1 class="title">■■■■■■■</h1>
         <p class="hint">Click anywhere to continue...</p>
     </div>
     
     <!-- Screen 2: Enter password 0412 -->
     <div id="screen2" class="screen">
+        <div class="corner-hint bottom-left"></div>
         <h2 class="subtitle">ENTER PASSWORD</h2>
         <div class="input-display" id="password-display">
             <span class="input-char">_</span>
@@ -476,7 +525,7 @@
     
     <!-- Screen 3: ARE YOU MY FRIEND? -->
     <div id="screen3" class="screen">
-        <h2 class="subtitle">ARE YOU MY FR■IE■ND?</h2>
+        <h2 class="subtitle" id="subtitle3">ARE YOU MY FR■IE■ND?</h2>
         <div class="input-display" id="answer-display"></div>
         
         <div class="click-to-open" id="open-text-keyboard-btn">TAP TO TYPE ANSWER</div>
@@ -507,18 +556,18 @@
     
     <!-- Hidden Ending Components -->
     <div id="countdown-container" class="countdown-container">
-        <div class="countdown-title">Countdown to January 1st</div>
+        <div class="countdown-title">COUNTDOWN TO JANUARY 1ST</div>
         <div class="countdown" id="countdown">00:00:00:000</div>
         <div class="countdown-message" id="countdown-message"></div>
     </div>
     
     <div class="draggable-container" id="draggable-container">
-        <div class="merge-zone" id="merge-zone">Merge Here</div>
+        <div class="merge-zone" id="merge-zone">DRAG BOTH HERE</div>
         <div class="merge-message" id="merge-message"></div>
     </div>
 
     <script>
-        // Screen elements
+        // ========== 全局变量 ==========
         const screens = {
             1: document.getElementById('screen1'),
             2: document.getElementById('screen2'),
@@ -528,24 +577,18 @@
             6: document.getElementById('screen6')
         };
         
-        // Input displays
         const passwordDisplay = document.getElementById('password-display');
         const answerDisplay = document.getElementById('answer-display');
-        
-        // Native input elements for mobile keyboard
         const passwordInput = document.getElementById('password-input');
         const textInput = document.getElementById('text-input');
-        
-        // Buttons to open keyboard
         const openKeyboardBtn = document.getElementById('open-keyboard-btn');
         const openTextKeyboardBtn = document.getElementById('open-text-keyboard-btn');
-        
-        // Navigation buttons
         const btnYes = document.getElementById('btn-yes');
         const btnNo = document.getElementById('btn-no');
         const buttonsContainer = document.getElementById('buttons-container');
+        const subtitle3 = document.getElementById('subtitle3');
         
-        // Hidden ending elements
+        // 隐藏结局相关
         const countdownContainer = document.getElementById('countdown-container');
         const countdownElement = document.getElementById('countdown');
         const countdownMessage = document.getElementById('countdown-message');
@@ -553,71 +596,100 @@
         const mergeZone = document.getElementById('merge-zone');
         const mergeMessage = document.getElementById('merge-message');
         
-        // State variables
+        // 状态变量
         let currentScreen = 1;
         let password = '';
         let answer = '';
         
-        // Hidden ending tracking
-        let secretClickPattern = [];
+        // 隐藏结局追踪
+        let secretStage = 0; // 0:未开始, 1:完成屏幕1, 2:完成屏幕2, 3:完成屏幕3
+        let subtitleClickCount = 0;
         let secretButtonAdded = false;
-        let secretEndingActivated = false;
-        let subtitle3ClickCount = 0;
-        let happyElement, sadElement;
-        let isDragging = false;
-        let dragElement = null;
+        let happyElement = null;
+        let sadElement = null;
         
-        // Switch screen function
+        // ========== 辅助函数 ==========
+        
+        // 显示点击反馈
+        function showClickFeedback(x, y, color = '#00ff00') {
+            const feedback = document.createElement('div');
+            feedback.className = 'click-feedback';
+            feedback.style.left = (x - 10) + 'px';
+            feedback.style.top = (y - 10) + 'px';
+            feedback.style.backgroundColor = color;
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 800);
+        }
+        
+        // 显示调试信息（实际使用时可以移除）
+        function debugLog(message) {
+            console.log(`[DEBUG] ${message}`);
+        }
+        
+        // ========== 屏幕切换函数 ==========
         function switchScreen(screenNumber) {
-            // Hide all screens
+            debugLog(`Switching to screen ${screenNumber}`);
+            
+            // 隐藏所有屏幕
             Object.values(screens).forEach(screen => {
                 screen.classList.remove('active');
             });
             
-            // Show target screen
+            // 显示目标屏幕
             screens[screenNumber].classList.add('active');
             currentScreen = screenNumber;
             
-            // Reset inputs when changing screens
-            if (screenNumber === 2) {
-                password = '';
-                updatePasswordDisplay();
-                // Focus on password input after a short delay
-                setTimeout(() => {
-                    openKeyboardBtn.style.display = 'block';
-                    passwordInput.value = '';
-                }, 300);
-            } else if (screenNumber === 3) {
-                answer = '';
-                updateAnswerDisplay();
-                // Focus on text input after a short delay
-                setTimeout(() => {
-                    openTextKeyboardBtn.style.display = 'block';
-                    textInput.value = '';
-                }, 300);
-            } else if (screenNumber === 4) {
-                // Check if we should add the secret button
-                checkAndAddSecretButton();
-            } else if (screenNumber === 5) {
-                // Wait 3 seconds then exit
-                setTimeout(() => {
-                    document.body.innerHTML = '<div style="background:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#fff;font-family:Courier New;opacity:0;animation:fadeIn 2s forwards;">Goodbye</h1></div>';
+            // 屏幕特定的初始化
+            switch(screenNumber) {
+                case 2:
+                    password = '';
+                    updatePasswordDisplay();
                     setTimeout(() => {
-                        window.location.href = 'about:blank';
-                    }, 1000);
-                }, 3000);
-            } else if (screenNumber === 6) {
-                // Wait 2 seconds then exit
-                setTimeout(() => {
-                    document.body.innerHTML = '<div style="background:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#fff;font-family:Courier New;opacity:0;animation:fadeIn 2s forwards;">Goodbye</h1></div>';
+                        openKeyboardBtn.style.display = 'block';
+                        passwordInput.value = '';
+                    }, 300);
+                    break;
+                    
+                case 3:
+                    answer = '';
+                    updateAnswerDisplay();
                     setTimeout(() => {
-                        window.location.href = 'about:blank';
-                    }, 1000);
-                }, 2000);
+                        openTextKeyboardBtn.style.display = 'block';
+                        textInput.value = '';
+                    }, 300);
+                    break;
+                    
+                case 4:
+                    // 检查是否应该添加秘密按钮
+                    checkAndAddSecretButton();
+                    break;
+                    
+                case 5:
+                    setTimeout(() => {
+                        document.body.innerHTML = '<div style="background:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#fff;font-family:Courier New;opacity:0;animation:fadeIn 2s forwards;">Goodbye</h1></div>';
+                        setTimeout(() => {
+                            window.location.href = 'about:blank';
+                        }, 1000);
+                    }, 3000);
+                    break;
+                    
+                case 6:
+                    setTimeout(() => {
+                        document.body.innerHTML = '<div style="background:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#fff;font-family:Courier New;opacity:0;animation:fadeIn 2s forwards;">Goodbye</h1></div>';
+                        setTimeout(() => {
+                            window.location.href = 'about:blank';
+                        }, 1000);
+                    }, 2000);
+                    break;
             }
         }
         
-        // Update password display
+        // ========== 密码显示函数 ==========
         function updatePasswordDisplay() {
             const chars = passwordDisplay.querySelectorAll('.input-char');
             chars.forEach((char, index) => {
@@ -629,7 +701,6 @@
                     char.classList.remove('filled');
                 }
                 
-                // Animate each character
                 char.style.animation = 'none';
                 setTimeout(() => {
                     char.style.animation = 'fadeIn 0.5s ease-out forwards';
@@ -637,7 +708,6 @@
             });
         }
         
-        // Update answer display
         function updateAnswerDisplay() {
             answerDisplay.innerHTML = '';
             
@@ -654,178 +724,117 @@
             }
         }
         
-        // Hidden ending functions
-        function trackSecretClicks(event) {
-            if (secretEndingActivated) return;
-            
-            const screen = screens[currentScreen];
-            const rect = screen.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            const screenWidth = rect.width;
-            const screenHeight = rect.height;
-            
-            // Screen 1: Click top-left corner (within 20% of width and height)
-            if (currentScreen === 1) {
-                if (x < screenWidth * 0.2 && y < screenHeight * 0.2) {
-                    console.log("Screen 1: Top-left corner clicked");
-                    secretClickPattern.push(1);
-                    // Show visual feedback
-                    showClickFeedback(event.clientX, event.clientY, '#00ff00');
-                }
-            }
-            // Screen 2: Click bottom-left corner
-            else if (currentScreen === 2) {
-                if (secretClickPattern.length === 1 && 
-                    x < screenWidth * 0.2 && y > screenHeight * 0.8) {
-                    console.log("Screen 2: Bottom-left corner clicked");
-                    secretClickPattern.push(2);
-                    showClickFeedback(event.clientX, event.clientY, '#00ff00');
-                } else if (secretClickPattern.length !== 1) {
-                    secretClickPattern = [];
-                }
-            }
-            
-            // Check if pattern is complete
-            if (secretClickPattern.length >= 2 && secretClickPattern[0] === 1 && secretClickPattern[1] === 2) {
-                console.log("Secret pattern stage 1 & 2 complete!");
-            }
-        }
+        // ========== 隐藏结局函数 ==========
         
-        function showClickFeedback(x, y, color) {
-            const feedback = document.createElement('div');
-            feedback.style.position = 'fixed';
-            feedback.style.left = `${x - 10}px`;
-            feedback.style.top = `${y - 10}px`;
-            feedback.style.width = '20px';
-            feedback.style.height = '20px';
-            feedback.style.borderRadius = '50%';
-            feedback.style.backgroundColor = color;
-            feedback.style.zIndex = '10000';
-            feedback.style.pointerEvents = 'none';
-            feedback.style.animation = 'fadeInOut 1s forwards';
-            
-            document.body.appendChild(feedback);
-            setTimeout(() => {
-                document.body.removeChild(feedback);
-            }, 1000);
-        }
-        
-        function activateSecretEnding() {
-            secretEndingActivated = true;
-            console.log("Secret ending activated!");
-            
-            // Remove click tracking
-            document.removeEventListener('click', trackSecretClicks);
-        }
-        
+        // 检查并添加秘密按钮
         function checkAndAddSecretButton() {
-            if (secretEndingActivated && !secretButtonAdded) {
-                // Add secret button
+            debugLog(`Checking secret stage: ${secretStage}, Button added: ${secretButtonAdded}`);
+            
+            if (secretStage >= 3 && !secretButtonAdded) {
+                debugLog("Adding secret button!");
+                
+                // 创建秘密按钮
                 const secretBtn = document.createElement('button');
                 secretBtn.id = 'btn-secret';
                 secretBtn.className = 'btn secret-btn';
                 secretBtn.textContent = 'anything';
-                secretBtn.style.animationDelay = '1.1s';
+                secretBtn.style.animation = 'fadeIn 1s forwards, secretPulse 2s infinite';
                 secretBtn.style.opacity = '0';
-                secretBtn.style.animation = 'fadeIn 1s 0.5s forwards';
                 
-                // Insert between the two buttons
+                // 插入到两个按钮之间
                 buttonsContainer.insertBefore(secretBtn, btnNo);
                 
-                // Add event listener with immediate response
-                secretBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    secretBtn.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        showSecretWarning();
-                    }, 150);
-                });
+                // 强制动画开始
+                setTimeout(() => {
+                    secretBtn.style.opacity = '1';
+                }, 100);
                 
-                // Touch support
-                secretBtn.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    secretBtn.style.transform = 'scale(0.95)';
-                }, { passive: false });
-                
-                secretBtn.addEventListener('touchend', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setTimeout(() => {
-                        showSecretWarning();
-                    }, 150);
-                }, { passive: false });
+                // 添加点击事件
+                secretBtn.addEventListener('click', handleSecretButtonClick);
+                secretBtn.addEventListener('touchstart', handleSecretButtonClick, { passive: false });
                 
                 secretButtonAdded = true;
+                
+                // 更新提示
+                const hint = screens[4].querySelector('.hint');
+                if (hint) {
+                    hint.textContent = 'Choose an option (secret unlocked!)';
+                }
             }
         }
         
-        function showSecretWarning() {
-            // Show warning message
+        function handleSecretButtonClick(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            debugLog("Secret button clicked!");
+            
+            // 移除秘密按钮
+            const secretBtn = document.getElementById('btn-secret');
+            if (secretBtn) {
+                secretBtn.style.display = 'none';
+            }
+            
+            // 隐藏其他按钮
+            btnYes.style.display = 'none';
+            btnNo.style.display = 'none';
+            
+            // 显示警告信息
             const warning = document.createElement('div');
             warning.className = 'watch-out';
             warning.textContent = 'watch out :)';
+            warning.style.opacity = '0';
+            warning.style.animation = 'fadeIn 1s forwards, warningBlink 1s infinite 1s';
             
-            // Create OK button
-            const okBtn = document.createElement('button');
-            okBtn.className = 'btn ok-btn';
-            okBtn.textContent = 'OK';
+            screens[4].appendChild(warning);
             
-            // Add to screen
-            const screen = screens[4];
-            screen.appendChild(warning);
-            screen.appendChild(okBtn);
-            
-            // Remove other buttons
-            btnYes.style.display = 'none';
-            btnNo.style.display = 'none';
-            if (document.getElementById('btn-secret')) {
-                document.getElementById('btn-secret').style.display = 'none';
-            }
-            
-            // OK button event with immediate response
-            okBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                okBtn.style.transform = 'scale(0.95)';
+            // 创建OK按钮
+            setTimeout(() => {
+                const okBtn = document.createElement('button');
+                okBtn.className = 'btn ok-btn';
+                okBtn.textContent = 'OK';
+                okBtn.style.opacity = '0';
+                okBtn.style.animation = 'fadeIn 1s forwards';
+                
+                screens[4].appendChild(okBtn);
+                
+                // OK按钮点击事件
+                okBtn.addEventListener('click', () => {
+                    startHiddenEnding();
+                });
+                okBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    startHiddenEnding();
+                }, { passive: false });
+                
+                // 强制动画开始
                 setTimeout(() => {
-                    startCountdown();
-                }, 150);
-            });
-            
-            // Touch support
-            okBtn.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                okBtn.style.transform = 'scale(0.95)';
-            }, { passive: false });
-            
-            okBtn.addEventListener('touchend', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setTimeout(() => {
-                    startCountdown();
-                }, 150);
-            }, { passive: false });
+                    okBtn.style.opacity = '1';
+                }, 100);
+            }, 1000);
         }
         
-        function startCountdown() {
-            // Transition to white background
-            document.body.style.backgroundColor = '#fff';
-            document.body.style.color = '#000';
-            document.body.style.transition = 'background-color 2s, color 2s';
+        function startHiddenEnding() {
+            debugLog("Starting hidden ending!");
             
-            // Hide all screens
+            // 渐变到白色背景
+            document.body.style.transition = 'background-color 3s, color 3s';
+            document.body.style.backgroundColor = '#ffffff';
+            document.body.style.color = '#000000';
+            
+            // 隐藏所有屏幕
             Object.values(screens).forEach(screen => {
                 screen.style.display = 'none';
             });
             
-            // Show countdown
-            countdownContainer.style.display = 'flex';
-            
-            // Start countdown to January 1st
+            // 显示倒计时
+            setTimeout(() => {
+                countdownContainer.style.display = 'flex';
+                startCountdown();
+            }, 2000);
+        }
+        
+        function startCountdown() {
             updateCountdown();
             const countdownInterval = setInterval(updateCountdown, 10);
             
@@ -833,34 +842,27 @@
                 const now = new Date();
                 let targetYear = now.getFullYear();
                 
-                // If we're past January 1st, target next year
-                if (now.getMonth() === 0 && now.getDate() === 1) {
-                    // It's already January 1st
-                    targetYear += 1;
-                } else if (now.getMonth() > 0 || (now.getMonth() === 0 && now.getDate() > 1)) {
-                    // We're past January 1st this year
+                // 如果已经过了1月1日，就计算下一年的
+                if (now.getMonth() > 0 || (now.getMonth() === 0 && now.getDate() > 1)) {
                     targetYear += 1;
                 }
                 
-                const targetDate = new Date(targetYear, 0, 1); // January 1st
+                const targetDate = new Date(targetYear, 0, 1);
                 const diff = targetDate - now;
                 
                 if (diff <= 0) {
-                    // Countdown finished
                     clearInterval(countdownInterval);
                     countdownElement.textContent = "00:00:00:000";
                     showFinalMessage();
                     return;
                 }
                 
-                // Calculate time components
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 const milliseconds = diff % 1000;
                 
-                // Format as HH:MM:SS:mmm (including days in hours)
                 const totalHours = days * 24 + hours;
                 countdownElement.textContent = 
                     `${String(totalHours).padStart(2, '0')}:` +
@@ -871,97 +873,88 @@
         }
         
         function showFinalMessage() {
-            // Show final message
             countdownMessage.textContent = "Look. We have grown up.";
             
-            // After a delay, show draggable elements
             setTimeout(() => {
                 createDraggableElements();
             }, 3000);
         }
         
         function createDraggableElements() {
-            draggableContainer.style.display = 'flex';
+            draggableContainer.style.display = 'block';
             mergeZone.style.display = 'flex';
             
-            // Create "happy" element
+            // 创建happy元素
             happyElement = document.createElement('div');
             happyElement.className = 'draggable happy';
             happyElement.textContent = 'happy';
             happyElement.id = 'happy-element';
             
-            // Create "sad" element
+            // 创建sad元素
             sadElement = document.createElement('div');
             sadElement.className = 'draggable sad';
             sadElement.textContent = 'sad';
             sadElement.id = 'sad-element';
             
-            // Add to container
             draggableContainer.appendChild(happyElement);
             draggableContainer.appendChild(sadElement);
             
-            // Make them draggable
+            // 使它们可拖动
             makeDraggable(happyElement);
             makeDraggable(sadElement);
         }
         
         function makeDraggable(element) {
-            let offsetX = 0, offsetY = 0;
+            let isDragging = false;
+            let offsetX, offsetY;
             
-            element.addEventListener('mousedown', dragStart);
-            element.addEventListener('touchstart', touchStart, { passive: false });
+            element.addEventListener('mousedown', startDrag);
+            element.addEventListener('touchstart', startDragTouch, { passive: false });
             
-            function dragStart(e) {
-                e.preventDefault();
+            function startDrag(e) {
                 isDragging = true;
-                dragElement = element;
-                
                 const rect = element.getBoundingClientRect();
                 offsetX = e.clientX - rect.left;
                 offsetY = e.clientY - rect.top;
                 
-                document.addEventListener('mousemove', dragMove);
-                document.addEventListener('mouseup', dragEnd);
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', stopDrag);
             }
             
-            function touchStart(e) {
+            function startDragTouch(e) {
                 e.preventDefault();
                 isDragging = true;
-                dragElement = element;
-                
                 const touch = e.touches[0];
                 const rect = element.getBoundingClientRect();
                 offsetX = touch.clientX - rect.left;
                 offsetY = touch.clientY - rect.top;
                 
-                document.addEventListener('touchmove', touchMove, { passive: false });
-                document.addEventListener('touchend', dragEnd);
+                document.addEventListener('touchmove', dragTouch, { passive: false });
+                document.addEventListener('touchend', stopDrag);
             }
             
-            function dragMove(e) {
-                if (!isDragging || dragElement !== element) return;
-                e.preventDefault();
-                element.style.left = `${e.clientX - offsetX}px`;
-                element.style.top = `${e.clientY - offsetY}px`;
+            function drag(e) {
+                if (!isDragging) return;
+                element.style.left = (e.clientX - offsetX) + 'px';
+                element.style.top = (e.clientY - offsetY) + 'px';
                 checkMerge();
             }
             
-            function touchMove(e) {
-                if (!isDragging || dragElement !== element) return;
+            function dragTouch(e) {
+                if (!isDragging) return;
                 e.preventDefault();
                 const touch = e.touches[0];
-                element.style.left = `${touch.clientX - offsetX}px`;
-                element.style.top = `${touch.clientY - offsetY}px`;
+                element.style.left = (touch.clientX - offsetX) + 'px';
+                element.style.top = (touch.clientY - offsetY) + 'px';
                 checkMerge();
             }
             
-            function dragEnd() {
+            function stopDrag() {
                 isDragging = false;
-                dragElement = null;
-                document.removeEventListener('mousemove', dragMove);
-                document.removeEventListener('mouseup', dragEnd);
-                document.removeEventListener('touchmove', touchMove);
-                document.removeEventListener('touchend', dragEnd);
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchmove', dragTouch);
+                document.removeEventListener('touchend', stopDrag);
                 checkMerge();
             }
         }
@@ -973,42 +966,21 @@
             const sadRect = sadElement.getBoundingClientRect();
             const mergeRect = mergeZone.getBoundingClientRect();
             
-            const happyCenter = {
-                x: happyRect.left + happyRect.width / 2,
-                y: happyRect.top + happyRect.height / 2
-            };
+            // 检查两个元素是否都在合并区域内
+            const isHappyInZone = checkRectInZone(happyRect, mergeRect);
+            const isSadInZone = checkRectInZone(sadRect, mergeRect);
             
-            const sadCenter = {
-                x: sadRect.left + sadRect.width / 2,
-                y: sadRect.top + sadRect.height / 2
-            };
-            
-            // Check if both centers are in the merge zone
-            const happyInZone = 
-                happyCenter.x > mergeRect.left && 
-                happyCenter.x < mergeRect.right &&
-                happyCenter.y > mergeRect.top && 
-                happyCenter.y < mergeRect.bottom;
-                
-            const sadInZone = 
-                sadCenter.x > mergeRect.left && 
-                sadCenter.x < mergeRect.right &&
-                sadCenter.y > mergeRect.top && 
-                sadCenter.y < mergeRect.bottom;
-            
-            if (happyInZone && sadInZone) {
-                // Merge successful
+            if (isHappyInZone && isSadInZone) {
+                // 合并成功
                 happyElement.style.display = 'none';
                 sadElement.style.display = 'none';
                 mergeZone.style.display = 'none';
                 
-                // Show final message
                 mergeMessage.textContent = 'goodbye！：）';
                 mergeMessage.style.display = 'block';
                 
-                // Exit after 3 seconds
                 setTimeout(() => {
-                    document.body.innerHTML = '<div style="background:#fff;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#000;font-family:Courier New;opacity:0;animation:fadeIn 2s forwards;">goodbye！：）</h1></div>';
+                    document.body.innerHTML = '<div style="background:#fff;width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><h1 style="color:#000;font-family:Courier New;animation:fadeIn 2s forwards;">goodbye！：）</h1></div>';
                     setTimeout(() => {
                         window.location.href = 'about:blank';
                     }, 2000);
@@ -1016,234 +988,252 @@
             }
         }
         
-        // Initialize
-        function init() {
-            // Setup event listeners with immediate response
+        function checkRectInZone(elementRect, zoneRect) {
+            return (
+                elementRect.left >= zoneRect.left - 50 &&
+                elementRect.right <= zoneRect.right + 50 &&
+                elementRect.top >= zoneRect.top - 50 &&
+                elementRect.bottom <= zoneRect.bottom + 50
+            );
+        }
+        
+        // ========== 隐藏结局触发检测 ==========
+        
+        // 屏幕1：点击左上角
+        screens[1].addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const width = rect.width;
+            const height = rect.height;
             
-            // Screen 1: Click anywhere to continue
-            screens[1].addEventListener('click', (e) => {
+            debugLog(`Screen 1 click: x=${x}, y=${y}, width=${width}, height=${height}`);
+            
+            // 检查是否点击左上角（前20%区域）
+            if (x < width * 0.2 && y < height * 0.2) {
+                debugLog("Screen 1: Top-left corner clicked!");
+                secretStage = 1;
+                showClickFeedback(e.clientX, e.clientY);
+                
+                // 显示确认信息
+                const hint = this.querySelector('.hint');
+                if (hint) {
+                    const originalText = hint.textContent;
+                    hint.textContent = 'Secret step 1 completed!';
+                    setTimeout(() => {
+                        hint.textContent = originalText;
+                    }, 1500);
+                }
+            }
+        });
+        
+        // 屏幕2：点击左下角
+        screens[2].addEventListener('click', function(e) {
+            if (secretStage !== 1) return;
+            
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const width = rect.width;
+            const height = rect.height;
+            
+            debugLog(`Screen 2 click: x=${x}, y=${y}`);
+            
+            // 检查是否点击左下角（宽度前20%，高度后20%）
+            if (x < width * 0.2 && y > height * 0.8) {
+                debugLog("Screen 2: Bottom-left corner clicked!");
+                secretStage = 2;
+                showClickFeedback(e.clientX, e.clientY);
+            }
+        });
+        
+        // 屏幕3：点击字幕3次
+        if (subtitle3) {
+            subtitle3.addEventListener('click', function(e) {
+                if (secretStage !== 2) return;
+                
                 e.stopPropagation();
-                screens[1].style.transform = 'scale(0.99)';
+                subtitleClickCount++;
+                debugLog(`Subtitle clicked: ${subtitleClickCount} times`);
+                
+                // 显示点击反馈
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                showClickFeedback(e.clientX, e.clientY, '#ff5555');
+                
+                // 显示点击计数
+                const originalText = this.textContent;
+                this.textContent = `${originalText} (${subtitleClickCount}/3)`;
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 500);
+                
+                if (subtitleClickCount >= 3) {
+                    debugLog("Screen 3: Subtitle clicked 3 times!");
+                    secretStage = 3;
+                    
+                    // 显示完成信息
+                    this.textContent = "Secret complete!";
+                    this.style.color = '#ff5555';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.color = '';
+                    }, 1500);
+                }
+            });
+        }
+        
+        // ========== 主事件监听器 ==========
+        
+        // 屏幕1：点击任意位置继续
+        screens[1].addEventListener('click', function(e) {
+            // 检查是否点击了提示区域，如果是则不切换屏幕
+            const hint = this.querySelector('.hint');
+            if (hint && hint.contains(e.target)) {
+                return;
+            }
+            
+            // 如果不是在触发隐藏结局，就正常切换
+            if (secretStage < 1) {
+                this.style.transform = 'scale(0.99)';
                 setTimeout(() => {
                     switchScreen(2);
                 }, 150);
-            });
+            }
+        });
+        
+        // 屏幕2：打开键盘按钮
+        openKeyboardBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                passwordInput.focus();
+                this.style.display = 'none';
+            }, 150);
+        });
+        
+        // 密码输入处理
+        passwordInput.addEventListener('input', function(e) {
+            password = e.target.value.replace(/\D/g, '');
             
-            // Screen 1: Secret click tracking (top-left corner)
-            screens[1].addEventListener('click', (e) => {
-                const rect = screens[1].getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const width = rect.width;
-                const height = rect.height;
-                
-                if (x < width * 0.2 && y < height * 0.2) {
-                    secretClickPattern.push(1);
-                    console.log("Screen 1 secret click registered");
-                }
-            });
-            
-            // Screen 2: Open keyboard button
-            openKeyboardBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                openKeyboardBtn.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    passwordInput.focus();
-                    openKeyboardBtn.style.display = 'none';
-                }, 150);
-            });
-            
-            // Screen 2: Secret click tracking (bottom-left corner)
-            screens[2].addEventListener('click', (e) => {
-                if (secretClickPattern.length === 1) {
-                    const rect = screens[2].getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const width = rect.width;
-                    const height = rect.height;
-                    
-                    if (x < width * 0.2 && y > height * 0.8) {
-                        secretClickPattern.push(2);
-                        console.log("Screen 2 secret click registered");
-                    }
-                }
-            });
-            
-            // Screen 2: Password input handling
-            passwordInput.addEventListener('input', (e) => {
-                // Get only numeric characters
-                password = e.target.value.replace(/\D/g, '');
-                
-                // Limit to 4 digits
-                if (password.length > 4) {
-                    password = password.substring(0, 4);
-                }
-                
-                // Update display
-                updatePasswordDisplay();
-                
-                // Update input value
-                passwordInput.value = password;
-                
-                // Check if password is complete
-                if (password.length === 4) {
-                    if (password === '0412') {
-                        // Correct password
-                        setTimeout(() => {
-                            switchScreen(3);
-                        }, 800);
-                    } else {
-                        // Wrong password - shake animation
-                        passwordDisplay.classList.add('error');
-                        setTimeout(() => {
-                            passwordDisplay.classList.remove('error');
-                        }, 500);
-                        
-                        // Clear after a delay
-                        setTimeout(() => {
-                            password = '';
-                            passwordInput.value = '';
-                            updatePasswordDisplay();
-                            openKeyboardBtn.style.display = 'block';
-                        }, 1000);
-                    }
-                }
-            });
-            
-            // Screen 2: Blur handling (keyboard closed)
-            passwordInput.addEventListener('blur', () => {
-                setTimeout(() => {
-                    openKeyboardBtn.style.display = 'block';
-                }, 300);
-            });
-            
-            // Screen 3: Open keyboard button
-            openTextKeyboardBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                openTextKeyboardBtn.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    textInput.focus();
-                    openTextKeyboardBtn.style.display = 'none';
-                }, 150);
-            });
-            
-            // Screen 3: Text input handling
-            textInput.addEventListener('input', (e) => {
-                answer = e.target.value.toUpperCase();
-                updateAnswerDisplay();
-                
-                // Check for correct answers
-                const correctAnswers = ['YES', 'RIGHT', 'CORRECT'];
-                if (correctAnswers.includes(answer)) {
-                    // Correct answer
-                    setTimeout(() => {
-                        switchScreen(4);
-                    }, 800);
-                }
-            });
-            
-            // Screen 3: Blur handling (keyboard closed)
-            textInput.addEventListener('blur', () => {
-                setTimeout(() => {
-                    openTextKeyboardBtn.style.display = 'block';
-                }, 300);
-            });
-            
-            // Screen 3: Subtitle click tracking (3 clicks for secret)
-            const subtitle3 = screens[3].querySelector('.subtitle');
-            if (subtitle3) {
-                subtitle3.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    subtitle3ClickCount++;
-                    
-                    // Visual feedback
-                    subtitle3.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        subtitle3.style.transform = 'scale(1)';
-                    }, 150);
-                    
-                    // Check if we have the first two parts of secret pattern
-                    if (secretClickPattern.length >= 2 && secretClickPattern[0] === 1 && secretClickPattern[1] === 2) {
-                        if (subtitle3ClickCount === 3) {
-                            console.log("Screen 3: 3 clicks on subtitle registered");
-                            activateSecretEnding();
-                        }
-                    } else {
-                        subtitle3ClickCount = 0;
-                    }
-                });
+            if (password.length > 4) {
+                password = password.substring(0, 4);
             }
             
-            // Screen 4: Button events with immediate response
-            btnYes.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                btnYes.style.transform = 'scale(0.95)';
+            updatePasswordDisplay();
+            passwordInput.value = password;
+            
+            if (password.length === 4) {
+                if (password === '0412') {
+                    setTimeout(() => {
+                        switchScreen(3);
+                    }, 800);
+                } else {
+                    passwordDisplay.classList.add('error');
+                    setTimeout(() => {
+                        passwordDisplay.classList.remove('error');
+                    }, 500);
+                    
+                    setTimeout(() => {
+                        password = '';
+                        passwordInput.value = '';
+                        updatePasswordDisplay();
+                        openKeyboardBtn.style.display = 'block';
+                    }, 1000);
+                }
+            }
+        });
+        
+        passwordInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                openKeyboardBtn.style.display = 'block';
+            }, 300);
+        });
+        
+        // 屏幕3：打开文本键盘按钮
+        openTextKeyboardBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                textInput.focus();
+                this.style.display = 'none';
+            }, 150);
+        });
+        
+        // 文本输入处理
+        textInput.addEventListener('input', function(e) {
+            answer = e.target.value.toUpperCase();
+            updateAnswerDisplay();
+            
+            const correctAnswers = ['YES', 'RIGHT', 'CORRECT'];
+            if (correctAnswers.includes(answer)) {
                 setTimeout(() => {
-                    switchScreen(5);
-                }, 150);
-            });
-            
-            btnNo.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                btnNo.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    switchScreen(6);
-                }, 150);
-            });
-            
-            // Touch events for mobile
-            btnYes.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                btnYes.style.transform = 'scale(0.95)';
-            }, { passive: false });
-            
-            btnYes.addEventListener('touchend', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setTimeout(() => {
-                    switchScreen(5);
-                }, 150);
-            }, { passive: false });
-            
-            btnNo.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                btnNo.style.transform = 'scale(0.95)';
-            }, { passive: false });
-            
-            btnNo.addEventListener('touchend', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setTimeout(() => {
-                    switchScreen(6);
-                }, 150);
-            }, { passive: false });
-            
-            // Initialize hidden inputs
+                    switchScreen(4);
+                }, 800);
+            }
+        });
+        
+        textInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                openTextKeyboardBtn.style.display = 'block';
+            }, 300);
+        });
+        
+        // 屏幕4：按钮点击
+        btnYes.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                switchScreen(5);
+            }, 150);
+        });
+        
+        btnNo.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                switchScreen(6);
+            }, 150);
+        });
+        
+        // 触摸事件支持
+        btnYes.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.95)';
+        }, { passive: false });
+        
+        btnYes.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            setTimeout(() => {
+                switchScreen(5);
+            }, 150);
+        }, { passive: false });
+        
+        btnNo.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.95)';
+        }, { passive: false });
+        
+        btnNo.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            setTimeout(() => {
+                switchScreen(6);
+            }, 150);
+        }, { passive: false });
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化隐藏输入框
             setTimeout(() => {
                 passwordInput.style.display = 'block';
                 textInput.style.display = 'block';
             }, 1000);
             
-            // Add CSS for click feedback
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeInOut {
-                    0% { opacity: 0; transform: scale(0.5); }
-                    50% { opacity: 1; transform: scale(1.2); }
-                    100% { opacity: 0; transform: scale(1); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Start everything
-        document.addEventListener('DOMContentLoaded', init);
+            debugLog("Page loaded. Secret stage: " + secretStage);
+        });
     </script>
 </body>
-        </html>
+</html>
